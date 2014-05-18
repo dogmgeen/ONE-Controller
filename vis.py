@@ -1,21 +1,25 @@
-import matplotlib.pyplot as plt
-from matplotlib import cm
 import results
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+
+parameters = ['overhead_ratio', 'started', 'response_prob', 'dropped', 'rtt_med', 'delivery_prob', 'removed', 'rtt_avg', 'latency_avg', 'delivered', 'hopcount_avg', 'relayed', 'buffertime_avg', 'created', 'aborted', 'buffertime_med', 'hopcount_med', 'latency_med']
+
+mpl.rcParams['legend.fontsize'] = 10
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-X, Y, Z = results.get(kwd="")
-ax.plot_surface(X, Y, Z, rstride=8, cstride=8, alpha=0.3)
-cset = ax.contourf(X, Y, Z, zdir='z', offset=-100, cmap=cm.coolwarm)
-cset = ax.contourf(X, Y, Z, zdir='x', offset=-40, cmap=cm.coolwarm)
-cset = ax.contourf(X, Y, Z, zdir='y', offset=40, cmap=cm.coolwarm)
-
-ax.set_xlabel('X')
-ax.set_xlim(-40, 40)
-ax.set_ylabel('Y')
-ax.set_ylim(-40, 40)
-ax.set_zlabel('Z')
-ax.set_zlim(-100, 100)
+x, y, z = results.get(
+  x_kwd="bufferSize",
+  y_kwd="TTL",
+  z_kwd="delivery_prob"
+)
+ax.plot(x, y, z, label='Epidemic routing on SIGCOMM09')
+ax.legend()
+ax.set_xlabel('Buffer Size (bytes)')
+ax.set_ylabel('TTL (minutes)')
+ax.set_zlabel('Delivery probability')
 
 plt.show()
-
